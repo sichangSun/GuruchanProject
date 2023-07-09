@@ -49,10 +49,10 @@
 
 <script>
 export default {
-    name:'FoodList',
-    comments:{
-    },
-    props:['FoodList']
+  name:'FoodList',
+  comments:{
+  },
+  props:['FoodList']
 
 
 }

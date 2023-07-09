@@ -58,88 +58,88 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        options: [],// 源数组
-        // filteroptions: [],// title的数组
-        search: '',
-        value: [],// tags用的数组
-        isEmptyOfList: false,
-        disabled: false
-      }
+export default {
+  data() {
+    return {
+      options: [],// 源数组
+      // filteroptions: [],// title的数组
+      search: '',
+      value: [],// tags用的数组
+      isEmptyOfList: false,
+      disabled: false
+    }
+  },
+  props:['tags'],
+  computed: {
+    criteria() {
+      // 検索のキーワードを処理
+      return this.search.trim();
     },
-    props:['tags'],
-    computed: {
-      criteria() {
-        // 検索のキーワードを処理
-        return this.search.trim();
-      },
-      //计算属性 下拉菜单的数组
-      availableOptions() {
-        const criteria = this.criteria
-        // valueに（上のtags）値あげる
-        const options = this.options.filter(opt => this.value.indexOf(opt) === -1 && opt.isDel !== 1)
-          console.log(options);
-          // titleのみ入ってる配列
-        // const titleoptions = [];
-        if (criteria) {
-          // 検索アリの場合
-          // const a = options.filter(opt => opt.title.indexOf(criteria) > -1);
-          // console.log(a);
-          // a.forEach(item => titleoptions.push(item.title));
-          // return titleoptions;
-          return options.filter(opt => opt.title.indexOf(criteria) > -1);
-
-        }
-        // 検索なしの場合
-        // options.forEach(item => titleoptions.push(item.title));
+    //计算属性 下拉菜单的数组
+    availableOptions() {
+      const criteria = this.criteria
+      // valueに（上のtags）値あげる
+      const options = this.options.filter(opt => this.value.indexOf(opt) === -1 && opt.isDel !== 1)
+      console.log(options);
+      // titleのみ入ってる配列
+      // const titleoptions = [];
+      if (criteria) {
+        // 検索アリの場合
+        // const a = options.filter(opt => opt.title.indexOf(criteria) > -1);
+        // console.log(a);
+        // a.forEach(item => titleoptions.push(item.title));
         // return titleoptions;
-        return options
-      },
-      // 检索找不到时
-      searchDesc() {
-        if (!this.isEmptyOfList){
-          if (this.criteria && this.availableOptions.length === 0) {
-          return '一致するタグは存在していません。'
-          }
-        }
-        return ''
-      }
-    },
-    // watch:{
-    //   criteria(newdata){
-    //     if (!newdata && this.availableOptions.length === 0) {
-    //       this.isEmptyOfList = true;
-    //       this.disabled =true;
-    //     }
-    //   }
-    // },
-    created(){
-      // 初期有无数据表示
-      let isHavetagOption = false;
-      if(!this.tags){
-        this.isEmptyOfList = true;
-      }else {
-        this.tags.forEach(option =>{
-          if (option.isDel === 0) {
-            isHavetagOption = true;
-          }})
-          if(!isHavetagOption) {
-            this.isEmptyOfList = true;
-          }
-      }
-      this.options =this.tags;
-      console.log(this.options);
+        return options.filter(opt => opt.title.indexOf(criteria) > -1);
 
+      }
+      // 検索なしの場合
+      // options.forEach(item => titleoptions.push(item.title));
+      // return titleoptions;
+      return options
     },
-    methods: {
-      onOptionClick({ option, addTag }) {
-        addTag(option.title)
-        this.search = ''
+    // 检索找不到时
+    searchDesc() {
+      if (!this.isEmptyOfList){
+        if (this.criteria && this.availableOptions.length === 0) {
+          return '一致するタグは存在していません。'
+        }
+      }
+      return ''
+    }
+  },
+  // watch:{
+  //   criteria(newdata){
+  //     if (!newdata && this.availableOptions.length === 0) {
+  //       this.isEmptyOfList = true;
+  //       this.disabled =true;
+  //     }
+  //   }
+  // },
+  created(){
+    // 初期有无数据表示
+    let isHavetagOption = false;
+    if(!this.tags){
+      this.isEmptyOfList = true;
+    }else {
+      this.tags.forEach(option =>{
+        if (option.isDel === 0) {
+          isHavetagOption = true;
+        }})
+      if(!isHavetagOption) {
+        this.isEmptyOfList = true;
       }
     }
+    this.options =this.tags;
+    console.log(this.options);
+
+  },
+  methods: {
+    onOptionClick({ option, addTag }) {
+      addTag(option.title)
+      this.search = ''
+    }
   }
+}
 </script>
 <!-- <template>
   tagのcom,
