@@ -1,57 +1,57 @@
 <template>
   <div>
-    <b-form-group label="Tagged input using dropdown" label-for="tags-with-dropdown">
-      <b-form-tags id="tags-with-dropdown" v-model="value" no-outer-focus class="mb-2">
-        <template v-slot="{ tags, disabled, addTag, removeTag }">
-          <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
-            <li v-for="tag in tags" :key="tag" class="list-inline-item">
+    <b-form-group label="" label-for="tags-with-dropdown" class="tag-waku">
+      <b-form-tags id="tags-with-dropdown" v-model="value" no-outer-focus class="mb-2" >
+        <ul v-if="filteroptions.length > 0" class="list-inline d-inline-block mb-2">
+          <div v-for="tag in filteroptions" :key="tag.tagId" class="list-inline-item">
+            <div class="tall">
               <b-form-tag
-                @remove="removeTag(tag)"
-                :title="tag"
-                :disabled="disabled"
-                variant="info"
-                remove-label="Remove tag"
-              >{{ tag.title }}</b-form-tag>
-              <!-- variant 是bootstrap的变量.可能主要是控制css -->
-            </li>
-          </ul>
+              :no-remove="true"
+              :name="tag.tagId"
+              ref="tagValue"
+              >{{tag.title}}</b-form-tag>
+              <b-button @click="removeTag(tag.tagId)">x</b-button>
+            </div>
+            <!-- variant 是bootstrap的变量.可能主要是控制css -->
+          </div>
+        </ul>
 
-          <b-dropdown size="sm" variant="outline-secondary" block>
-            <template #button-content>
-              <b-icon icon="tag-fill"></b-icon> Choose tags
-            </template>
-            <b-dropdown-form @submit.stop.prevent="() => {}">
-              <b-form-group
-                label="タグ検索"
-                label-for="tag-search-input"
-                label-cols-md="auto"
-                class="mb-0"
-                label-size="sm"
-                :description="searchDesc"
-                :disabled="disabled"
-              >
-                <b-form-input
-                  v-model="search"
-                  id="tag-search-input"
-                  type="search"
-                  size="sm"
-                  autocomplete="off"
-                 ></b-form-input>
-              </b-form-group>
-            </b-dropdown-form>
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item-button
-              v-for="option in availableOptions"
-              :key="option.id"
-              @click="onOptionClick({ option, addTag })"
+        <b-dropdown size="sm" variant="outline-secondary" block>
+          <template #button-content>
+            <b-icon icon="tag-fill"></b-icon> Choose tags
+          </template>
+          <b-dropdown-form @submit.stop.prevent="() => {}">
+            <b-form-group
+              label="タグ検索"
+              label-for="tag-search-input"
+              label-cols-md="auto"
+              class="mb-0"
+              label-size="sm"
+              :description="searchDesc"
+              :disabled="disabled"
             >
-              {{ option.title}}
-            </b-dropdown-item-button>
-            <b-dropdown-text v-if="isEmptyOfList">
-              保存されているタグはありません。
-            </b-dropdown-text>
-          </b-dropdown>
-        </template>
+              <b-form-input
+                v-model="search"
+                id="tag-search-input"
+                type="search"
+                size="sm"
+                autocomplete="off"
+                ></b-form-input>
+            </b-form-group>
+          </b-dropdown-form>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item-button
+            v-for="option in availableOptions"
+            :key="option.tagId"
+            :disabled="checkChoosed(option.tagId)"
+            @click="optionClick(option.tagId)"
+          >
+            {{ option.title}}
+          </b-dropdown-item-button>
+          <b-dropdown-text v-if="isEmptyOfList">
+            保存されているタグはありません。
+          </b-dropdown-text>
+        </b-dropdown>
       </b-form-tags>
     </b-form-group>
   </div>
@@ -62,9 +62,9 @@ export default {
   data() {
     return {
       options: [],// 源数组
-      // filteroptions: [],// title的数组
+      filteroptions: [],// title的数组
       search: '',
-      value: [],// tags用的数组
+      value: [],
       isEmptyOfList: false,
       disabled: false
     }
@@ -79,22 +79,15 @@ export default {
     availableOptions() {
       const criteria = this.criteria
       // valueに（上のtags）値あげる
-      const options = this.options.filter(opt => this.value.indexOf(opt) === -1 && opt.isDel !== 1)
-      console.log(options);
-      // titleのみ入ってる配列
-      // const titleoptions = [];
+      const options = this.options.filter(opt => opt.isDel !== 1)
       if (criteria) {
         // 検索アリの場合
-        // const a = options.filter(opt => opt.title.indexOf(criteria) > -1);
-        // console.log(a);
-        // a.forEach(item => titleoptions.push(item.title));
-        // return titleoptions;
         return options.filter(opt => opt.title.indexOf(criteria) > -1);
 
       }
       // 検索なしの場合
-      // options.forEach(item => titleoptions.push(item.title));
-      // return titleoptions;
+
+      console.log(options)
       return options
     },
     // 检索找不到时
@@ -134,90 +127,41 @@ export default {
 
   },
   methods: {
-    onOptionClick({ option, addTag }) {
-      addTag(option.title)
+    optionClick(id) {
+      console.log(id)
+      const tagValue=this.options.find(opj => opj.tagId === id)
+      if(tagValue){
+        this.filteroptions.push(tagValue)
+      }
       this.search = ''
+      console.log("deeee",this.filteroptions)
+    },
+    removeTag(id){
+      console.log("参数",id)
+      const index = this.filteroptions.find(opj => opj.tagId===id)
+      if (index) {
+        this.filteroptions.splice(index, 1);
+      }
+    },
+    checkChoosed(id){
+      if (this.filteroptions.find(opj => opj.tagId===id)) {
+        return true;
+      }else {
+        return false;
+      }
     }
   }
 }
 </script>
-<!-- <template>
-  tagのcom,
-    用插槽来实现在搜索组建里显示,v-for循环
-  b-form-tags 可以实现tag
-  <div>
-    <b-form-group>
-      <b-form-tags>来管理整个组建,包括选择的渲染表示 v-model="value" value是过滤以后出来的新数组
-      <b-form-tags
-      v-model="value"
-      add-on-change
-      no-outer-focus>
-
-        <template v-slot="{ tags,inputAttrs, inputHandlers, disabled,removeTag}">
-
-          <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
-            <li v-for="tag in tags" :key="tag.tagId" class="list-inline-item">
-              <b-form-tag
-              @input="$emit('input', $event)"
-              @remove="removeTag(tag)">
-               <slot :tags="tagList"></slot>
-                {{ tags.tagList.title }}
-              </b-form-tag>
-            </li>
-          </ul>
-
-          <b-dropdown>
-            <template #button-content>
-              Choose tags
-            </template>
-            <b-dropdown-item-button
-              v-for="tag in availableOptions"
-              :key="tag.tagId"
-              v-bind="inputAttrs"
-              @click="inputHandlers"
-              :disabled="disabled"
-              :options="availableOptions"
-            >
-              {{ tag.title }}
-            </b-dropdown-item-button>
-            <b-dropdown-text v-if="tagList.length === 0">
-              There are no tags available to select
-            </b-dropdown-text>
-          </b-dropdown>
-        </template>
-      </b-form-tags>
-    </b-form-group>
-  </div>
-</template> -->
-
-<!-- <script>
-export default {
-  name: "TagWithPlace",
-  data(){
-    return {
-      value:[],
-      disabled:false
-    }
-  },
-  prop:{
-    tags:{}
-  },
-  watch:{
-// Todo 监听value 有的话,就把下拉菜单里这一项非活性
-  },
-  computed:{
-    // 原始数据过滤删掉的
-    availableOptions(){
-      return this.tagList.filter(tagOption => tagOption.isDel !== 1)
-    }
-
-  },
-  methods:{
-    inputHandlers(){
-    }
-  }
-};
-</script>
 <style>
+.tall{
+  weight: 100px;
+  height: 40px;
+  background-color: chocolate;
+}
+.tag-waku{
+  background-color:transparent;
+  border:0;
+}
+</style>
 
-</style> -->

@@ -1,34 +1,47 @@
 <template>
   <div>
+    <div>
+      <b-button class="backTop" @click="backTop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+      </b-button>
+    </div>
     <div class="container">
-      <div class="row">
+      <div class="homu-all">
+        <div class="row">
         <!-- header title -->
         <h1>Guruchan</h1>
         <div></div>
-      </div>
-      <div class="row sousuo">
+        </div>
+        <div class="row sousuo">
         <!-- sercharea -->
-        <div class="col-xl-7">
+        <div class="col">
+        </div>
+        <div class="col-xl-6">
           <div>
             <SerchArea
             :tagList="tagList"/>
           </div>
         </div>
-        <div class="col-xl-4">
-          2
+        <div class="col-xl-3">
           <like-button></like-button>
         </div>
-      </div>
-      <div class="row">
+        <div class="col">
+
+        </div>
+        </div>
+        <div class="row">
             <WriteNew />
-      </div>
-      <div class="row">
+        </div>
+        <div class="row col-xl-6">
         <!-- body list -->
           <!-- 默认最近.搜索以后变换,点击收藏,换成收藏里的 -->
           <div v-for="food in foodObj" :key="food.FoodId">
             <FoodList
             :FoodList="foodObj"/>
           </div>
+      </div>
       </div>
     </div>
     <div></div>
@@ -108,11 +121,17 @@ export default {
         {
           syuRui:'1',// タグの種類：食べ物の種類１、場所２、
           title:'shibu',
-          tagId:4,
+          tagId:5,
           addTime:'2021/3/4',
-          isDel:0// 削除の制御  1:削除、０：あり
+          isDel:1// 削除の制御  1:削除、０：あり
         }
       ],
+    }
+  },
+  methods:{
+    backTop(){
+      //Todo backtop
+      console.log("hh")
     }
   }
 };
@@ -120,5 +139,11 @@ export default {
 <style scoped>
 .sousuo {
   background-color: aquamarine;
+}
+.backTop{
+  float: left;
+  margin-left: 5px;
+  margin-top: 500px;
+
 }
 </style>

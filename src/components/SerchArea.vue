@@ -4,10 +4,7 @@
       {{ message }}
       <b-form-group label="検索" placeholder="“ここから入力してください”">
         <b-form-input v-model="serchFood">
-
-          <!-- 复习组件单机事件! -->
         </b-form-input>
-        <!-- TOdo tag  -->
       </b-form-group>
       <TagWithPlace :tags="tagList"/>
       <b-button type="submit" variant="primary">提交</b-button>
