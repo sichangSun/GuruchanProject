@@ -34,13 +34,15 @@
         <div class="row">
             <WriteNew />
         </div>
-        <div class="row col-xl-6">
+        <div class="row">
+          <!-- <div class="col"></div> -->
         <!-- body list -->
           <!-- 默认最近.搜索以后变换,点击收藏,换成收藏里的 -->
-          <div v-for="food in foodObj" :key="food.FoodId">
-            <FoodList
-            :FoodList="foodObj"/>
-          </div>
+              <div>
+                <FoodList
+              :FoodList="foodObj"/>
+              </div>
+          <!-- <div class="col"></div> -->
       </div>
       </div>
     </div>
@@ -67,6 +69,7 @@ export default {
       foodObj:[
         {
           FoodId:1,
+          MiseName:'味安',// 和tag连接
           FoodName:'背脂ちゃんはん',
           FoodPlace:'目黒',
           FoodImg:'。。',
@@ -78,6 +81,7 @@ export default {
         },
         {
           FoodId:2,
+          MiseName:'ミラン',
           FoodName:'味噌ラーメン',
           FoodPlace:'五反田',
           FoodImg:'。。',
