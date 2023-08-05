@@ -10,6 +10,7 @@
                 <th scope="col">更新日付</th>
                 <th scope="col">tag</th>
                 <th scope="col">お気に入り</th>
+                <th scope="col">もう行った</th>
                 <th scope="col">操作</th>
 
               </tr>
@@ -62,8 +63,14 @@
                         </td>
                         </th>
                         <th scope="row" >
+                        <td class="">
+                            <div>{{ food.goOnFlag === '1'?'行った':'行ってない'}}</div>
+                            <!-- タグ最後は配列で -->
+                        </td>
+                        </th>
+                        <th scope="row" >
                         <td class="col delBtn">
-                        <b-button variant="danger">削除</b-button>
+                        <b-button variant="danger" @click=editFood(food.FoodId)>編集</b-button>
                         </td>
                     </th>
               </tr>
@@ -76,7 +83,13 @@ export default {
   name:'FoodList',
   comments:{
   },
-  props:['FoodList']
+  props:['FoodList'],
+  methods:{
+    editFood (){
+    //todo 編集（新規追加）画面移動 id
+
+    }
+  }
 
 
 }

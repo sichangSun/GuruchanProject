@@ -32,7 +32,7 @@
         </div>
         </div>
         <div class="row">
-            <WriteNew />
+          <b-button @click="addNewFood" class="outline-primary">追加</b-button>
         </div>
         <div class="row">
           <!-- <div class="col"></div> -->
@@ -47,9 +47,10 @@
       </div>
     </div>
     <div></div>
+    <WriteNew ref="editModal"></WriteNew>
   </div>
 </template>
-
+<!-- 機能：行きたい店 -->
 <script>
 import LikeButton from './LikeButton.vue';
 import SerchArea from './SerchArea.vue';
@@ -71,13 +72,14 @@ export default {
           FoodId:1,
           MiseName:'味安',// 和tag连接
           FoodName:'背脂ちゃんはん',
-          FoodPlace:'目黒',
+          FoodPlace:'目黒',// TOdo 場所詳細
           FoodImg:'。。',
           FoodLikeFlag:false,
           FoodBunnRui:'cyuka',
           addTime:'2020/2/3',
           goToMeseTime:'2021/3/4',
-          newUpdateTime:'2022/4/5'
+          newUpdateTime:'2022/4/5',
+          goOnFlag:'0'// 行ったことあるかどうか
         },
         {
           FoodId:2,
@@ -89,7 +91,8 @@ export default {
           FoodBunnRui:'ramenn',
           addTime:'2020/2/3',
           goToMeseTime:'2021/3/4',
-          newUpdateTime:'2022/4/5'
+          newUpdateTime:'2022/4/5',
+          goOnFlag:'1'
         }],
       tagList: [
         {
@@ -130,19 +133,26 @@ export default {
           isDel:1// 削除の制御  1:削除、０：あり
         }
       ],
+      editModal: false
     }
   },
+  // created:{
+  //   // this.$refs.eidtModal.$el.style.display = "block";
+  // },
   methods:{
     backTop(){
       //Todo backtop
       console.log("hh")
+    },
+    addNewFood(){
+      this.$refs.editModal.$refs['edit'].show();
     }
   }
 };
 </script>
 <style scoped>
 .sousuo {
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
 }
 .backTop{
   float: left;
@@ -150,4 +160,5 @@ export default {
   margin-top: 500px;
 
 }
+/* TODO right */
 </style>
