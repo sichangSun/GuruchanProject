@@ -12,7 +12,6 @@
                 <th scope="col">お気に入り</th>
                 <th scope="col">もう行った</th>
                 <th scope="col">操作</th>
-
               </tr>
             </thead>
             <tbody  >

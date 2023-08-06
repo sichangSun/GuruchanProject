@@ -1,9 +1,11 @@
 <!-- Please remove this file from your project -->
 <template>
   <div>
-    <b-modal ref="edit" title="guruchan食べ物追加・編集">
+    <b-modal ref="edit" title="guruchan食べ物追加・編集"
+    @ok="sumitEvent">
+    <!-- @hidden="resetModal" Todo調べる -->
       <div class="d-block">
-        <b-form @submit="onSubmit" @reset="onReset">
+        <b-form @reset="onReset" ref="form">
           <div class="row">
             <b-form-group
               id="input-group-1"
@@ -59,17 +61,24 @@
             <!-- 調べるネット、グーグルのAPIマップ開くとか
             groupとinputの関係調べる -->
             </b-form-group>
-
-          <b-button type="submit" variant="primary">Submit</b-button>
-          <b-button type="reset" variant="danger">Reset</b-button>
+            <template #modal-footer="{ ok, cancel}">
+              <b-button type="submit" variant="primary" @click="ok()">Submit</b-button>
+              <b-button variant="danger" @click="cancel()">cancel</b-button>
+            </template>
+            <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
       </div>
     </b-modal>
+<!-- Todo alertcustomerでポップアップ作る、okPopupflagでvーif -->
+    <AlertCustomer v-if="okPopupflag"
+    :title="AlertCustomerMsg.title">
+    </AlertCustomer>
   </div>
 </template>
 
 <script>
 // import "~/assets/style/Style.scss";
+import AlertCustomer from './AlertCustomer.vue';
 export default {
   name: "WriteNew",
   data(){
@@ -86,11 +95,18 @@ export default {
         // addTime:'2020/2/3',
         // goToMeseTime:'2021/3/4',
         // newUpdateTime:'2022/4/5',  apiで作る
+      },
+      okPopupflag:false,
+      AlertCustomerMsg:{
+        title:'',
       }
     }
   },
   props:['foodList'],
-  created:{
+  components:{
+    AlertCustomer
+  },
+  created(){
   // Todo 編集の時にすでにあるデータを取得して画面表示でする
   },
   methods:{
@@ -99,7 +115,37 @@ export default {
     },
     onReset(event){
       event.preventDefault()
-    }
+    },
+    sumitEvent(event){
+      event.preventDefault();
+      this.handleSubmit();
+      // this.resetModal();// クリア
+      this.okPopupflag=true;
+      this.$refs['edit'].hide();
+    },
+    handleSubmit(){
+      // okの場合、OK pop up、だめの場合、チエック
+      if(!this.checkFormValidity()){
+        console.log('false')
+      }else{
+        console.log(this.form)
+      }
+    },
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity()
+      return valid
+    },
+    // resetModal(){
+    //   this.form.mise='',
+    //   this.form.foddName='',
+    //   this.form.foodPlace='',
+    //   this.form.foodPlacesyousai='',//場所詳細
+    //   this.form.FoodImg='',
+    //   this.form. FoodLikeFlag='',
+    //   this.form.FoodBunnRui='',
+    //   this.form.goOnFlag=''
+    // Todo 空にする 問題ある！！！！！！！
+    //},
   }
 }
 </script>

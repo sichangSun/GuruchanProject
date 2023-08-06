@@ -71,7 +71,7 @@ export default {
         {
           FoodId:1,
           MiseName:'味安',// 和tag连接
-          FoodName:'背脂ちゃんはん',
+          FoodName:'背脂チャーハン',
           FoodPlace:'目黒',// TOdo 場所詳細
           FoodImg:'。。',
           FoodLikeFlag:false,

@@ -12,6 +12,7 @@
 <script>
 export default {
   name: "AlertCustomer",
+  //Todo propsをobjを修正！
   props: {
     title: { type: String, require: true },
     msg: {
