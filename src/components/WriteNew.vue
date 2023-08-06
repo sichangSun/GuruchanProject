@@ -2,7 +2,7 @@
 <template>
   <div>
     <b-modal ref="edit" title="guruchan食べ物追加・編集"
-    @ok="sumitEvent">
+    @ok="submitEvent" trigger="ok">
     <!-- @hidden="resetModal" Todo調べる -->
       <div class="d-block">
         <b-form @reset="onReset" ref="form">
@@ -70,15 +70,22 @@
       </div>
     </b-modal>
 <!-- Todo alertcustomerでポップアップ作る、okPopupflagでvーif -->
-    <AlertCustomer v-if="okPopupflag"
-    :title="AlertCustomerMsg.title">
-    </AlertCustomer>
+    <!-- <div v-if="okPopupflag">
+      <AlertCustomer
+        :popOpMsg="AlertCustomerMsgOK">
+        </AlertCustomer>
+    </div>
+    <div v-if="errPopupflag">
+      <AlertCustomer
+        :popOpMsg="AlertCustomerMsgErr">
+        </AlertCustomer>
+    </div> -->
   </div>
 </template>
 
 <script>
 // import "~/assets/style/Style.scss";
-import AlertCustomer from './AlertCustomer.vue';
+// import AlertCustomer from './AlertCustomer.vue';
 export default {
   name: "WriteNew",
   data(){
@@ -97,14 +104,26 @@ export default {
         // newUpdateTime:'2022/4/5',  apiで作る
       },
       okPopupflag:false,
-      AlertCustomerMsg:{
-        title:'',
+      errPopupflag:false,
+      AlertCustomerMsgOK:{
+        title:'おけ',
+        msg:'',
+        isshow:'',
+        button_left:'',
+        button_right:'',
+      },
+      AlertCustomerMsgErr:{
+        title:'失敗',
+        msg:'',
+        isshow:'',
+        button_left:'',
+        button_right:'',
       }
     }
   },
   props:['foodList'],
   components:{
-    AlertCustomer
+    // AlertCustomer
   },
   created(){
   // Todo 編集の時にすでにあるデータを取得して画面表示でする
@@ -116,22 +135,27 @@ export default {
     onReset(event){
       event.preventDefault()
     },
-    sumitEvent(event){
+    submitEvent(event){
+      //sumit のあとの処理
       event.preventDefault();
       this.handleSubmit();
       // this.resetModal();// クリア
-      this.okPopupflag=true;
+      // this.okPopupflag=true;
       this.$refs['edit'].hide();
     },
     handleSubmit(){
-      // okの場合、OK pop up、だめの場合、チエック
+      // sumit処理
+      //Todo await insert
+      // okの場合、OK popup閉じる、だめの場合、チエック、await失敗の場合、失敗エラーmsg
       if(!this.checkFormValidity()){
         console.log('false')
       }else{
         console.log(this.form)
+        this.$refs['edit'].hide();//写自定义事件回调事件
       }
     },
     checkFormValidity() {
+      //項目チエック
       const valid = this.$refs.form.checkValidity()
       return valid
     },
