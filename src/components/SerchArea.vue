@@ -6,7 +6,9 @@
         <b-form-input v-model="serchFood">
         </b-form-input>
       </b-form-group>
-      <TagWithPlace :tags="tagList"/>
+      <TagWithPlace :tags="tagList"
+      :tagChangeFlag="true"
+      :tagSearchFlag="true"/>
       <b-button type="submit" variant="primary">提交</b-button>
       <b-button type="reset" variant="danger">重置</b-button>
     </b-form>
@@ -61,7 +63,7 @@ export default{
   },
   methods: {
     onSubmit() {
-      console.log("ok");
+      console.log("submitok");
     },
     onReset() {
       alert(1);

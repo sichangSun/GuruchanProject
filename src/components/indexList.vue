@@ -40,14 +40,20 @@
           <!-- 默认最近.搜索以后变换,点击收藏,换成收藏里的 -->
               <div>
                 <FoodList
-              :FoodList="foodObj"/>
+              :FoodList="foodObj"
+              @emitFood = "emitFood"/>
               </div>
           <!-- <div class="col"></div> -->
       </div>
       </div>
     </div>
     <div></div>
-    <WriteNew ref="editModal"></WriteNew>
+    <WriteNew ref="editModal"
+    @form-submitted="handleFormSubmitted"
+    :changeID="changeID"
+    :tagList="tagList"
+    :foodList="foodObj"
+    ></WriteNew>
   </div>
 </template>
 <!-- 機能：行きたい店 -->
@@ -79,7 +85,8 @@ export default {
           addTime:'2020/2/3',
           goToMeseTime:'2021/3/4',
           newUpdateTime:'2022/4/5',
-          goOnFlag:'0'// 行ったことあるかどうか
+          goOnFlag:0,// 行ったことあるかどうか
+          foodTag:[]
         },
         {
           FoodId:2,
@@ -92,7 +99,8 @@ export default {
           addTime:'2020/2/3',
           goToMeseTime:'2021/3/4',
           newUpdateTime:'2022/4/5',
-          goOnFlag:'1'
+          goOnFlag:1,
+          foodTag:[1,2],
         }],
       tagList: [
         {
@@ -133,20 +141,40 @@ export default {
           isDel:1// 削除の制御  1:削除、０：あり
         }
       ],
-      editModal: false
+      editModal: false,
+      changeID:''// 编辑时foodID
     }
   },
-  // created:{
-  //   // this.$refs.eidtModal.$el.style.display = "block";
-  // },
+  created(){
+    // TOdo 初期化
+    // getDateAPI
+    // 会社copy!
+  },
   methods:{
     backTop(){
       //Todo backtop
-      console.log("hh")
+      //console.log("hh")
     },
-    addNewFood(){
+    addNewFood(id){
+      this.changeID = id;
       this.$refs.editModal.$refs['edit'].show();
+      // this.changeID = id;
+    },
+    handleFormSubmitted() {
+      // 在提交表单后隐藏弹窗
+      this.$nextTick(() => {
+        this.$refs.editModal.$refs['edit'].hide();
+      })
+    },
+    // 编辑食物
+    emitFood(id){
+
+      this.addNewFood(id);
+      // this.changeID= id;
+      // console.log( 'indexList  changeID!!!!!!!!',this.changeID)
     }
+    // getDateAPI
+
   }
 };
 </script>

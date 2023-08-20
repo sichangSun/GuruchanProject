@@ -2,7 +2,7 @@
   <div>
     <b-form-group label="" label-for="tags-with-dropdown" class="tag-waku">
       <b-form-tags id="tags-with-dropdown" v-model="value" no-outer-focus class="mb-2" >
-        <ul v-if="filteroptions.length > 0" class="list-inline d-inline-block mb-2">
+        <ul v-if="filteroptions.length > 0 && tagSearchFlag" class="list-inline d-inline-block mb-2">
           <div v-for="tag in filteroptions" :key="tag.tagId" class="list-inline-item">
             <div class="tall">
               <b-form-tag
@@ -15,8 +15,15 @@
             <!-- variant 是bootstrap的变量.可能主要是控制css -->
           </div>
         </ul>
+        <ul v-if="choosedTagValue.length > 0 && !tagSearchFlag" class="list-inline d-inline-block mb-2">
+          <div v-for="tag in choosedTagValue" :key="tag.tagId" class="list-inline-item">
+            <div class="tall">
+              {{tag.title}}
+            </div>
+          </div>
+        </ul>
 
-        <b-dropdown size="sm" variant="outline-secondary" block>
+        <b-dropdown v-if="tagChangeFlag" size="sm" variant="outline-secondary" block>
           <template #button-content>
             <b-icon icon="tag-fill"></b-icon> Choose tags
           </template>
@@ -66,10 +73,13 @@ export default {
       search: '',
       value: [],
       isEmptyOfList: false,
-      disabled: false
+      disabled: false,
+      //tagChangeFlag:false,//タグ編集するflag
+      //tagSearchFlag:true,
+      choosedTagValue:[],// 編集の時すでに選択されてるたぐの配列
     }
   },
-  props:['tags'],
+  props:['tags','foodTag','tagChangeFlag','tagSearchFlag'],
   computed: {
     criteria() {
       // 検索のキーワードを処理
@@ -86,8 +96,6 @@ export default {
 
       }
       // 検索なしの場合
-
-      console.log(options)
       return options
     },
     // 检索找不到时
@@ -110,25 +118,39 @@ export default {
   // },
   created(){
     // 初期有无数据表示
-    let isHavetagOption = false;
-    if(!this.tags){
-      this.isEmptyOfList = true;
-    }else {
-      this.tags.forEach(option =>{
-        if (option.isDel === 0) {
-          isHavetagOption = true;
-        }})
-      if(!isHavetagOption) {
+    console.log(this.tagSearchFlag)
+    if(this.tagSearchFlag){
+      let isHavetagOption = false;
+      if(!this.tags){
         this.isEmptyOfList = true;
+      }else {
+        this.tags.forEach(option =>{
+          if (option.isDel === 0) {
+            isHavetagOption = true;
+          }})
+        if(!isHavetagOption) {
+          this.isEmptyOfList = true;
+        }
       }
+      this.options =this.tags;
+    }else{
+      const choosedTagValueTem=[];
+      console.log('foodTag',this.foodTag)
+      if(this.foodTag){
+        this.foodTag.forEach(tagTem =>{
+          this.tags.forEach(tagObj =>{
+            if(tagTem === tagObj.tagId){
+              choosedTagValueTem.push(tagObj);
+            }
+          })
+        })
+        this.choosedTagValue=choosedTagValueTem;
+      }
+      console.log('choosedTagValue',this.choosedTagValue);
     }
-    this.options =this.tags;
-    console.log(this.options);
-
   },
   methods: {
     optionClick(id) {
-      console.log(id)
       const tagValue=this.options.find(opj => opj.tagId === id)
       if(tagValue){
         this.filteroptions.push(tagValue)
@@ -137,7 +159,7 @@ export default {
       console.log("deeee",this.filteroptions)
     },
     removeTag(id){
-      console.log("参数",id)
+
       const index = this.filteroptions.find(opj => opj.tagId===id)
       if (index) {
         this.filteroptions.splice(index, 1);

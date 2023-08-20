@@ -63,7 +63,7 @@
                         </th>
                         <th scope="row" >
                         <td class="">
-                            <div>{{ food.goOnFlag === '1'?'行った':'行ってない'}}</div>
+                            <div>{{ food.goOnFlag === 1?'行った':'行ってない'}}</div>
                             <!-- タグ最後は配列で -->
                         </td>
                         </th>
@@ -84,8 +84,9 @@ export default {
   },
   props:['FoodList'],
   methods:{
-    editFood (){
+    editFood (id){
     //todo 編集（新規追加）画面移動 id
+      this.$emit('emitFood',id);
 
     }
   }
