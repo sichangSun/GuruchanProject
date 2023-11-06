@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"guruchan-back/app/models/entity"
+	models "guruchan-back/app/models/entity"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -28,7 +28,7 @@ func init() {
 		//panic(err) qubie
 	}
 }
-func QueryAllFoodList(userID string) (entity.GFoodSlice, error) {
+func QueryAllFoodList(userID string) (models.FoodSlice, error) {
 	// 原始打开数据库查询方法
 	// rows, err := db.Query("SELECT * FROM g_food")
 	// if err != nil {
@@ -37,7 +37,7 @@ func QueryAllFoodList(userID string) (entity.GFoodSlice, error) {
 	// }
 	// fmt.PrintFoodln("rows", rows)
 	ctx := context.Background()
-	raws, err := entity.GFoods().All(ctx, db)
+	raws, err := models.Foods().All(ctx, db)
 	if err != nil {
 		fmt.Println("err:", err)
 		return nil, err
@@ -47,7 +47,7 @@ func QueryAllFoodList(userID string) (entity.GFoodSlice, error) {
 	// defer db.Close()
 
 }
-func QueryFavoriteFoodList(userID string, typeCode string) (entity.GFoodSlice, error) {
+func QueryFavoriteFoodList(userID string, typeCode string) (models.FoodSlice, error) {
 	// 初始数据库查询方法
 	// rows, err := db.Query("SELECT * FROM g_food WHERE isLikeflag = 1")
 	// if err != nil {
@@ -55,7 +55,7 @@ func QueryFavoriteFoodList(userID string, typeCode string) (entity.GFoodSlice, e
 	// }
 	// fmt.Println("rows", rows)
 	ctx := context.Background()
-	raws, err := entity.GFoods(qm.Where("isLikeflag=?", typeCode)).All(ctx, db)
+	raws, err := models.Foods(qm.Where("isLikeflag=?", typeCode)).All(ctx, db)
 	if err != nil {
 		fmt.Println("err:", err)
 		return nil, err

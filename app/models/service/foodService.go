@@ -3,16 +3,16 @@ package service
 import (
 	"fmt"
 	"guruchan-back/app/models/db"
-	"guruchan-back/app/models/entity"
+	models "guruchan-back/app/models/entity"
 
 	"github.com/labstack/echo/v4"
 )
 
-var result entity.GFoodSlice
+var result models.FoodSlice
 var err error
 
 // 查询附复数
-func QueryAllFoodList(userID string, typeCode string) (entity.GFoodSlice, error) {
+func QueryAllFoodList(userID string, typeCode string) (models.FoodSlice, error) {
 	//typeCode 0:all 1:気に入り
 	if typeCode == "0" {
 		//All
@@ -33,10 +33,16 @@ func QueryAllFoodList(userID string, typeCode string) (entity.GFoodSlice, error)
 
 // 添加新的
 func CreateFood(e echo.Context) error {
+	var foodReq models.Food
+	err := e.Bind(&foodReq)
+	if err != nil {
+		return err
+	}
 	// request := e.Request().Body.Read()
-	// foodObj := entity.GFood{
+	// foodObj := models.GFood{
 	// 	UUserId:request.
 	// 	}
 	// foodObj.FoodId
 	//存数据自动采番问题?
+	return nil
 }

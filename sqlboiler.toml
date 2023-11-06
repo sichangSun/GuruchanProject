@@ -1,8 +1,10 @@
 driver = "mysql"
 
-
-output = "./models"
-pkgname="entity"
+output = "./app/models/entity"
+pkgname = "models"
+wipe = true
+no-tests = true
+add-enum-types = true
 
 [mysql]
 dbname = "guruchanDB"
@@ -13,4 +15,4 @@ port = 3306
 sslmode = "false"
 
 
-tables = ["g_user", "g_tag", "g_food"]
+tables = ["User", "Tag", "Food"]
