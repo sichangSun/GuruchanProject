@@ -1,0 +1,16 @@
+driver = "mysql"
+
+
+output = "./models"
+pkgname="entity"
+
+[mysql]
+dbname = "guruchanDB"
+user = "root"
+pass = "root1234"
+host = "localhost"
+port = 3306
+sslmode = "false"
+
+
+tables = ["g_user", "g_tag", "g_food"]
