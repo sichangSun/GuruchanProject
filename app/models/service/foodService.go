@@ -32,17 +32,22 @@ func QueryAllFoodList(userID string, typeCode string) (models.FoodSlice, error) 
 }
 
 // 添加新的
-func CreateFood(e echo.Context) error {
-	var foodReq models.Food
-	err := e.Bind(&foodReq)
+func CreateFood(e echo.Context, foodReq *models.Food) error {
+	foodObj := models.Food{}
+	foodObj = *foodReq
+	err := db.InsertFood(foodObj)
 	if err != nil {
 		return err
 	}
-	// request := e.Request().Body.Read()
-	// foodObj := models.GFood{
-	// 	UUserId:request.
-	// 	}
-	// foodObj.FoodId
-	//存数据自动采番问题?
 	return nil
+}
+
+// 验证Req
+func CheckReqCreate(e echo.Context) (*models.Food, error) {
+	foodReq := models.Food{}
+	err := e.Bind(&foodReq)
+	if err != nil {
+		return nil, err
+	}
+	return &foodReq, nil
 }

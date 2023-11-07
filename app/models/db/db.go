@@ -8,6 +8,7 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
@@ -61,4 +62,14 @@ func QueryFavoriteFoodList(userID string, typeCode string) (models.FoodSlice, er
 		return nil, err
 	}
 	return raws, nil
+}
+
+// 新增food
+func InsertFood(foodReq models.Food) error {
+	ctx := context.Background()
+	err := foodReq.Insert(ctx, db, boil.Infer())
+	if err != nil {
+		return err
+	}
+	return nil
 }
