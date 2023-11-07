@@ -27,7 +27,7 @@ func RegisterRouteFood(e *echo.Echo, baseurl string) {
 	e.POST(baseurl+"/CreateFood", handlers.CreateFood)
 	e.PUT(baseurl+"/UpdateFood", handlers.UpdateFood)
 	//
-	e.DELETE(baseurl+"/DeleteFood", handlers.DeleteFood)
+	e.DELETE(baseurl+"/DeleteFood/:fodId", handlers.DeleteFood)
 
 }
 

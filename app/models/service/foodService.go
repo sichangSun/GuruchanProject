@@ -42,7 +42,18 @@ func CreateFood(e echo.Context, foodReq *models.Food) error {
 	return nil
 }
 
-// 验证Req
+// 更新
+func UpdateFood(e echo.Context, foodReq *models.Food) error {
+	foodObj := models.Food{}
+	foodObj = *foodReq
+	err := db.UpdateFood(foodObj)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// 增加和修改验证Req
 func CheckReqCreate(e echo.Context) (*models.Food, error) {
 	foodReq := models.Food{}
 	err := e.Bind(&foodReq)

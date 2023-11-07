@@ -73,3 +73,13 @@ func InsertFood(foodReq models.Food) error {
 	}
 	return nil
 }
+
+// 更新
+func UpdateFood(foodReq models.Food) error {
+	ctx := context.Background()
+	_, err := foodReq.Update(ctx, db, boil.Infer())
+	if err != nil {
+		return err
+	}
+	return nil
+}
