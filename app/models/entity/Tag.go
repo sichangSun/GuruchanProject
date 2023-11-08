@@ -28,10 +28,11 @@ type Tag struct {
 	UserId      int       `boil:"userId" json:"userId" toml:"userId" yaml:"userId"`
 	FoodId      int       `boil:"foodId" json:"foodId" toml:"foodId" yaml:"foodId"`
 	TagTittle   string    `boil:"tagTittle" json:"tagTittle" toml:"tagTittle" yaml:"tagTittle"`
-	Typecode    null.Int  `boil:"typecode" json:"typecode,omitempty" toml:"typecode" yaml:"typecode,omitempty"`
+	Typecode    int       `boil:"typecode" json:"typecode" toml:"typecode" yaml:"typecode"`
 	TAddTime    time.Time `boil:"t_addTime" json:"t_addTime" toml:"t_addTime" yaml:"t_addTime"`
 	TUpdataTime null.Time `boil:"t_updataTime" json:"t_updataTime,omitempty" toml:"t_updataTime" yaml:"t_updataTime,omitempty"`
-	IsDel       null.Int  `boil:"isDel" json:"isDel,omitempty" toml:"isDel" yaml:"isDel,omitempty"`
+	// 1为删除
+	IsDel int `boil:"isDel" json:"isDel" toml:"isDel" yaml:"isDel"`
 
 	R *tagR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L tagL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -79,24 +80,45 @@ var TagTableColumns = struct {
 
 // Generated where
 
+type whereHelpertime_Time struct{ field string }
+
+func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.EQ, x)
+}
+func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.NEQ, x)
+}
+func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
 var TagWhere = struct {
 	TagId       whereHelperint
 	UserId      whereHelperint
 	FoodId      whereHelperint
 	TagTittle   whereHelperstring
-	Typecode    whereHelpernull_Int
+	Typecode    whereHelperint
 	TAddTime    whereHelpertime_Time
 	TUpdataTime whereHelpernull_Time
-	IsDel       whereHelpernull_Int
+	IsDel       whereHelperint
 }{
 	TagId:       whereHelperint{field: "`Tag`.`tagId`"},
 	UserId:      whereHelperint{field: "`Tag`.`userId`"},
 	FoodId:      whereHelperint{field: "`Tag`.`foodId`"},
 	TagTittle:   whereHelperstring{field: "`Tag`.`tagTittle`"},
-	Typecode:    whereHelpernull_Int{field: "`Tag`.`typecode`"},
+	Typecode:    whereHelperint{field: "`Tag`.`typecode`"},
 	TAddTime:    whereHelpertime_Time{field: "`Tag`.`t_addTime`"},
 	TUpdataTime: whereHelpernull_Time{field: "`Tag`.`t_updataTime`"},
-	IsDel:       whereHelpernull_Int{field: "`Tag`.`isDel`"},
+	IsDel:       whereHelperint{field: "`Tag`.`isDel`"},
 }
 
 // TagRels is where relationship names are stored.

@@ -30,14 +30,17 @@ type Food struct {
 	FoodName       null.String `boil:"foodName" json:"foodName,omitempty" toml:"foodName" yaml:"foodName,omitempty"`
 	Address        null.String `boil:"address" json:"address,omitempty" toml:"address" yaml:"address,omitempty"`
 	FullAddress    null.String `boil:"fullAddress" json:"fullAddress,omitempty" toml:"fullAddress" yaml:"fullAddress,omitempty"`
-	IsLikeflag     null.Int    `boil:"isLikeflag" json:"isLikeflag,omitempty" toml:"isLikeflag" yaml:"isLikeflag,omitempty"`
-	Typecode       null.Int    `boil:"typecode" json:"typecode,omitempty" toml:"typecode" yaml:"typecode,omitempty"`
-	FAddTime       time.Time   `boil:"f_addTime" json:"f_addTime" toml:"f_addTime" yaml:"f_addTime"`
-	FUpdataTime    null.Time   `boil:"f_updataTime" json:"f_updataTime,omitempty" toml:"f_updataTime" yaml:"f_updataTime,omitempty"`
-	FirstTime      null.Time   `boil:"firstTime" json:"firstTime,omitempty" toml:"firstTime" yaml:"firstTime,omitempty"`
-	TestedFlag     null.Int    `boil:"testedFlag" json:"testedFlag,omitempty" toml:"testedFlag" yaml:"testedFlag,omitempty"`
-	FoodImg        null.String `boil:"foodImg" json:"foodImg,omitempty" toml:"foodImg" yaml:"foodImg,omitempty"`
-	IsDel          null.Int    `boil:"isDel" json:"isDel,omitempty" toml:"isDel" yaml:"isDel,omitempty"`
+	IsLikeflag     int         `boil:"isLikeflag" json:"isLikeflag" toml:"isLikeflag" yaml:"isLikeflag"`
+	// 0未分类
+	Typecode    int       `boil:"typecode" json:"typecode" toml:"typecode" yaml:"typecode"`
+	FAddTime    null.Time `boil:"f_addTime" json:"f_addTime,omitempty" toml:"f_addTime" yaml:"f_addTime,omitempty"`
+	FUpdataTime null.Time `boil:"f_updataTime" json:"f_updataTime,omitempty" toml:"f_updataTime" yaml:"f_updataTime,omitempty"`
+	FirstTime   null.Time `boil:"firstTime" json:"firstTime,omitempty" toml:"firstTime" yaml:"firstTime,omitempty"`
+	// 0未知,1无,2有
+	TestedFlag int         `boil:"testedFlag" json:"testedFlag" toml:"testedFlag" yaml:"testedFlag"`
+	FoodImg    null.String `boil:"foodImg" json:"foodImg,omitempty" toml:"foodImg" yaml:"foodImg,omitempty"`
+	// 1为删除
+	IsDel int `boil:"isDel" json:"isDel" toml:"isDel" yaml:"isDel"`
 
 	R *foodR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L foodL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -201,65 +204,6 @@ func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
 func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
 func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
-type whereHelpernull_Int struct{ field string }
-
-func (w whereHelpernull_Int) EQ(x null.Int) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
-}
-func (w whereHelpernull_Int) NEQ(x null.Int) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
-}
-func (w whereHelpernull_Int) LT(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpernull_Int) LTE(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpernull_Int) GT(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpernull_Int) GTE(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-func (w whereHelpernull_Int) IN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelpernull_Int) NIN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-func (w whereHelpernull_Int) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpernull_Int) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
-
-type whereHelpertime_Time struct{ field string }
-
-func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
-}
-func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
-}
-func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
 type whereHelpernull_Time struct{ field string }
 
 func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
@@ -291,14 +235,14 @@ var FoodWhere = struct {
 	FoodName       whereHelpernull_String
 	Address        whereHelpernull_String
 	FullAddress    whereHelpernull_String
-	IsLikeflag     whereHelpernull_Int
-	Typecode       whereHelpernull_Int
-	FAddTime       whereHelpertime_Time
+	IsLikeflag     whereHelperint
+	Typecode       whereHelperint
+	FAddTime       whereHelpernull_Time
 	FUpdataTime    whereHelpernull_Time
 	FirstTime      whereHelpernull_Time
-	TestedFlag     whereHelpernull_Int
+	TestedFlag     whereHelperint
 	FoodImg        whereHelpernull_String
-	IsDel          whereHelpernull_Int
+	IsDel          whereHelperint
 }{
 	FoodId:         whereHelperint{field: "`Food`.`foodId`"},
 	UserId:         whereHelperint{field: "`Food`.`userId`"},
@@ -306,14 +250,14 @@ var FoodWhere = struct {
 	FoodName:       whereHelpernull_String{field: "`Food`.`foodName`"},
 	Address:        whereHelpernull_String{field: "`Food`.`address`"},
 	FullAddress:    whereHelpernull_String{field: "`Food`.`fullAddress`"},
-	IsLikeflag:     whereHelpernull_Int{field: "`Food`.`isLikeflag`"},
-	Typecode:       whereHelpernull_Int{field: "`Food`.`typecode`"},
-	FAddTime:       whereHelpertime_Time{field: "`Food`.`f_addTime`"},
+	IsLikeflag:     whereHelperint{field: "`Food`.`isLikeflag`"},
+	Typecode:       whereHelperint{field: "`Food`.`typecode`"},
+	FAddTime:       whereHelpernull_Time{field: "`Food`.`f_addTime`"},
 	FUpdataTime:    whereHelpernull_Time{field: "`Food`.`f_updataTime`"},
 	FirstTime:      whereHelpernull_Time{field: "`Food`.`firstTime`"},
-	TestedFlag:     whereHelpernull_Int{field: "`Food`.`testedFlag`"},
+	TestedFlag:     whereHelperint{field: "`Food`.`testedFlag`"},
 	FoodImg:        whereHelpernull_String{field: "`Food`.`foodImg`"},
-	IsDel:          whereHelpernull_Int{field: "`Food`.`isDel`"},
+	IsDel:          whereHelperint{field: "`Food`.`isDel`"},
 }
 
 // FoodRels is where relationship names are stored.
@@ -334,8 +278,8 @@ type foodL struct{}
 
 var (
 	foodAllColumns            = []string{"foodId", "userId", "restaurantName", "foodName", "address", "fullAddress", "isLikeflag", "typecode", "f_addTime", "f_updataTime", "firstTime", "testedFlag", "foodImg", "isDel"}
-	foodColumnsWithoutDefault = []string{"userId", "restaurantName", "foodName", "address", "fullAddress", "typecode", "f_addTime", "f_updataTime", "firstTime", "testedFlag", "foodImg"}
-	foodColumnsWithDefault    = []string{"foodId", "isLikeflag", "isDel"}
+	foodColumnsWithoutDefault = []string{"userId", "restaurantName", "foodName", "address", "fullAddress", "f_addTime", "f_updataTime", "firstTime", "foodImg"}
+	foodColumnsWithDefault    = []string{"foodId", "isLikeflag", "typecode", "testedFlag", "isDel"}
 	foodPrimaryKeyColumns     = []string{"foodId"}
 	foodGeneratedColumns      = []string{}
 )

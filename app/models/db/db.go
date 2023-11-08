@@ -64,6 +64,13 @@ func QueryFavoriteFoodList(userID string, typeCode string) (models.FoodSlice, er
 	return raws, nil
 }
 
+// 返回某一个food对象
+func GetFoodByFoodId(foodId string) (*models.Food, error) {
+	ctx := context.Background()
+	raws, err := models.Foods(qm.Where("foodId=?", foodId)).One(ctx, db)
+	return raws, err
+}
+
 // 新增food
 func InsertFood(foodReq models.Food) error {
 	ctx := context.Background()
@@ -82,4 +89,35 @@ func UpdateFood(foodReq models.Food) error {
 		return err
 	}
 	return nil
+}
+
+// 论理删除(更新isdel)
+// func LogicalDeleteFood(foodId string) error {
+// 	ctx := context.Background()
+// 	_, err := foodReq.Update(ctx, db, boil.Infer())
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
+
+// 删除
+func DeleteFood(foodReq *models.Food) (int64, error) {
+	ctx := context.Background()
+	rows, err := foodReq.Delete(ctx, db)
+	if err != nil {
+		return 0, err
+	}
+	return rows, nil
+}
+
+// 查询是否存在
+func IsExists(foodId string) (bool, error) {
+	ctx := context.Background()
+	isExist, err := models.Foods(qm.Where("foodId=?", foodId)).Exists(ctx, db)
+	if err != nil {
+		return false, err
+	}
+	return isExist, nil
+
 }

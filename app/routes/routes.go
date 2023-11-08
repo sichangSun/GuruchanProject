@@ -26,7 +26,9 @@ func RegisterRouteFood(e *echo.Echo, baseurl string) {
 	e.GET(baseurl+"/getOneFoodL/:userId/:foodId", handlers.GetOneFood)
 	e.POST(baseurl+"/CreateFood", handlers.CreateFood)
 	e.PUT(baseurl+"/UpdateFood", handlers.UpdateFood)
-	//
+	//論理削除
+	e.GET(baseurl+"/LogicalDeleteFood/:fodId", handlers.LogicalDeleteFood)
+	//削除、不用
 	e.DELETE(baseurl+"/DeleteFood/:fodId", handlers.DeleteFood)
 
 }
