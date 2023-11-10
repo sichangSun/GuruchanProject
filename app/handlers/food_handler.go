@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Todo 新收藏某一个food
 // 查询
 func GetFoodList(e echo.Context) error {
 	userID := e.Param("userId")
@@ -32,15 +33,14 @@ func GetOneFood(e echo.Context) error {
 // 添加
 func CreateFood(e echo.Context) error {
 	//验证req
-	// fmt.Println("ok")
-	foodReq, err := service.CheckReqCreate(e)
+	foodReq, err := service.CheckFoodReqCreate(e)
 	if err != nil {
 		// 处理check请求验证
 		result := constants.Result{Code: 0, Message: err.Error()}
 		return e.JSON(http.StatusBadRequest, result)
 		// return e.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	serviceErr := service.CreateFood(e, foodReq)
+	serviceErr := service.CreateFoodObj(foodReq)
 	if serviceErr != nil {
 		// 处理查询错误
 		result := constants.Result{Code: 0, Message: err.Error()}
@@ -55,15 +55,15 @@ func CreateFood(e echo.Context) error {
 // 更新
 func UpdateFood(e echo.Context) error {
 	//验证格式
-	foodReq, err := service.CheckReqCreate(e)
+	foodReq, err := service.CheckFoodReqCreate(e)
 	if err != nil {
 		// 处理check请求验证
 		result := constants.Result{Code: 0, Message: err.Error()}
 		return e.JSON(http.StatusBadRequest, result)
 		// return e.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	serviceErr := service.UpdateFood(e, foodReq)
-	if serviceErr != nil {
+	err = service.UpdateFood(foodReq)
+	if err != nil {
 		// 处理查询错误
 		result := constants.Result{Code: 0, Message: err.Error()}
 		return e.JSON(http.StatusInternalServerError, result)
@@ -87,16 +87,16 @@ func LogicalDeleteFood(e echo.Context) error {
 }
 
 // 删除,实际删除,不用
-func DeleteFood(e echo.Context) error {
-	rows, err := service.DeleteFood(e)
-	if err != nil {
-		// 处理错误
-		result := constants.Result{Code: 0, Message: err.Error()}
-		return e.JSON(http.StatusInternalServerError, result)
-		// return e.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
-	}
-	// 返回 HTTP 200 响应
-	fmt.Println(rows)
-	result := constants.Result{Code: 1, Message: "Success:deleted"}
-	return e.JSON(http.StatusOK, result)
-}
+// func DeleteFood(e echo.Context) error {
+// 	rows, err := service.DeleteFood(e)
+// 	if err != nil {
+// 		// 处理错误
+// 		result := constants.Result{Code: 0, Message: err.Error()}
+// 		return e.JSON(http.StatusInternalServerError, result)
+// 		// return e.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+// 	}
+// 	// 返回 HTTP 200 响应
+// 	fmt.Println(rows)
+// 	result := constants.Result{Code: 1, Message: "Success:deleted"}
+// 	return e.JSON(http.StatusOK, result)
+// }

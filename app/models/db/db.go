@@ -14,6 +14,7 @@ import (
 
 var db *sql.DB
 
+// bd初始化
 func init() {
 	confDB := "root:root1234@tcp(localhost:3306)/guruchanDB?parseTime=true"
 	var err error
@@ -29,60 +30,28 @@ func init() {
 		//panic(err) qubie
 	}
 }
-func QueryAllFoodList(userID string) (models.FoodSlice, error) {
-	// 原始打开数据库查询方法
-	// rows, err := db.Query("SELECT * FROM g_food")
-	// if err != nil {
-	// 	fmt.Println("seccuse")
 
-	// }
-	// fmt.PrintFoodln("rows", rows)
-	ctx := context.Background()
-	raws, err := models.Foods().All(ctx, db)
-	if err != nil {
-		fmt.Println("err:", err)
-		return nil, err
-	}
-	return raws, nil
+////
 
-	// defer db.Close()
-
+type FoodDao struct {
 }
-func QueryFavoriteFoodList(userID string, typeCode string) (models.FoodSlice, error) {
-	// 初始数据库查询方法
-	// rows, err := db.Query("SELECT * FROM g_food WHERE isLikeflag = 1")
-	// if err != nil {
-	// 	fmt.Println("seccuse")
-	// }
-	// fmt.Println("rows", rows)
-	ctx := context.Background()
-	raws, err := models.Foods(qm.Where("isLikeflag=?", typeCode)).All(ctx, db)
-	if err != nil {
-		fmt.Println("err:", err)
-		return nil, err
-	}
-	return raws, nil
+type TagDao struct {
 }
 
-// 返回某一个food对象
-func GetFoodByFoodId(foodId string) (*models.Food, error) {
+// get某一个对象
+func (f FoodDao) GetObjById(ObjId string) (*models.Food, error) {
 	ctx := context.Background()
-	raws, err := models.Foods(qm.Where("foodId=?", foodId)).One(ctx, db)
+	raws, err := models.Foods(qm.Where("foodId=?", ObjId)).One(ctx, db)
+	return raws, err
+}
+func (t TagDao) GetObjById(ObjId string) (*models.Tag, error) {
+	ctx := context.Background()
+	raws, err := models.Tags(qm.Where("tagId=?", ObjId)).One(ctx, db)
 	return raws, err
 }
 
-// 新增food
-func InsertFood(foodReq models.Food) error {
-	ctx := context.Background()
-	err := foodReq.Insert(ctx, db, boil.Infer())
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// 更新
-func UpdateFood(foodReq models.Food) error {
+// 更新Obj
+func (f FoodDao) UpdateObj(foodReq models.Food) error {
 	ctx := context.Background()
 	_, err := foodReq.Update(ctx, db, boil.Infer())
 	if err != nil {
@@ -90,34 +59,91 @@ func UpdateFood(foodReq models.Food) error {
 	}
 	return nil
 }
-
-// 论理删除(更新isdel)
-// func LogicalDeleteFood(foodId string) error {
-// 	ctx := context.Background()
-// 	_, err := foodReq.Update(ctx, db, boil.Infer())
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
-
-// 删除
-func DeleteFood(foodReq *models.Food) (int64, error) {
+func (t TagDao) UpdateObj(tagReq models.Tag) error {
 	ctx := context.Background()
-	rows, err := foodReq.Delete(ctx, db)
+	_, err := tagReq.Update(ctx, db, boil.Infer())
 	if err != nil {
-		return 0, err
+		return err
 	}
-	return rows, nil
+	return nil
+}
+
+// //////////
+// 查询
+func (f FoodDao) QueryAllList(userID string) (models.FoodSlice, error) {
+	ctx := context.Background()
+	raws, err := models.Foods(qm.Where("userId=?", userID)).All(ctx, db)
+	if err != nil {
+		fmt.Println("err:", err)
+		return nil, err
+	}
+	return raws, nil
+	// defer db.Close()
+}
+func (t TagDao) QueryAllList(userID string) (models.TagSlice, error) {
+	ctx := context.Background()
+	raws, err := models.Tags(qm.Where("userId=?", userID)).All(ctx, db)
+	if err != nil {
+		fmt.Println("err:", err)
+		return nil, err
+	}
+	return raws, nil
+	// defer db.Close()
+}
+
+// 查询收藏food
+func QueryFavoriteFoodList(userID string) (models.FoodSlice, error) {
+	ctx := context.Background()
+	raws, err := models.Foods(qm.Where("isLikeflag=?", "1")).All(ctx, db)
+	if err != nil {
+		fmt.Println("err:", err)
+		return nil, err
+	}
+	return raws, nil
+}
+
+// 新增
+func (f FoodDao) InsertObj(foodReq models.Food) error {
+	ctx := context.Background()
+	err := foodReq.Insert(ctx, db, boil.Infer())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (t TagDao) InsertObj(tagReq models.Tag) error {
+	ctx := context.Background()
+	err := tagReq.Insert(ctx, db, boil.Infer())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // 查询是否存在
-func IsExists(foodId string) (bool, error) {
+func (FoodDao) IsExists(foodId int) (bool, error) {
 	ctx := context.Background()
 	isExist, err := models.Foods(qm.Where("foodId=?", foodId)).Exists(ctx, db)
 	if err != nil {
 		return false, err
 	}
 	return isExist, nil
-
 }
+func (TagDao) IsExists(tagId int) (bool, error) {
+	ctx := context.Background()
+	isExist, err := models.Tags(qm.Where("tagId=?", tagId)).Exists(ctx, db)
+	if err != nil {
+		return false, err
+	}
+	return isExist, nil
+}
+
+// // 删除
+// func DeleteFood(foodReq *models.Food) (int64, error) {
+// 	ctx := context.Background()
+// 	rows, err := foodReq.Delete(ctx, db)
+// 	if err != nil {
+// 		return 0, err
+// 	}
+// 	return rows, nil
+// }
