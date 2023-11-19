@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <IndexList msg="Welcome to Your Vue.js App"/>
+    <main-index msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-import IndexList from './components/indexList.vue';
+import MainIndex from './components/MainIndex.vue';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -14,7 +14,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 export default {
   name: 'App',
   components: {
-    IndexList
+    MainIndex
   }
 }
 </script>

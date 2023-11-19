@@ -56,7 +56,7 @@ import TagWithPlace from './TagWithPlace.vue';
             :tagSearchFlag="false"/>
             <!-- tag可能需要整体保存!!!! -->
             <span>
-              <b-button>tag変更・追加</b-button>
+              <b-button >tag変更・追加</b-button>
               <b-form-checkbox>tagに追加</b-form-checkbox>
             </span>
             <b-form-group
