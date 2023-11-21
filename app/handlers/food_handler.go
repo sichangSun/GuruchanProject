@@ -3,13 +3,12 @@ package handlers
 import (
 	"fmt"
 	"guruchan-back/app/constants"
-	"guruchan-back/app/models/service"
+	"guruchan-back/app/domain/service"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
-// Todo 新收藏某一个food
 // 查询
 func GetFoodList(e echo.Context) error {
 	userID := e.Param("userId")
@@ -33,6 +32,8 @@ func GetOneFood(e echo.Context) error {
 // 添加
 func CreateFood(e echo.Context) error {
 	//验证req
+	params := struct {
+	}
 	foodReq, err := service.CheckFoodReqCreate(e)
 	if err != nil {
 		// 处理check请求验证

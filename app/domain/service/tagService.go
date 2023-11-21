@@ -1,7 +1,7 @@
 package service
 
 import (
-	"guruchan-back/app/models/db"
+	"guruchan-back/app/common/db"
 	models "guruchan-back/app/models/entity"
 
 	"github.com/labstack/echo/v4"

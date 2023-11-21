@@ -3,10 +3,8 @@ package service
 import (
 	"errors"
 	"fmt"
-	"guruchan-back/app/models/db"
+	"guruchan-back/app/common/db"
 	models "guruchan-back/app/models/entity"
-
-	"github.com/labstack/echo/v4"
 	// "github.com/volatiletech/null/v8"
 )
 
@@ -24,7 +22,7 @@ func QueryAllFoodList(userID string, typeCode string) (models.FoodSlice, error) 
 	}
 	if typeCode == "1" {
 		//favorite
-		result, err = db.QueryFavoriteFoodList(userID)
+		// result, err = db.QueryFavoriteFoodList(userID)
 	}
 	//TODO:isdel论理删除过滤
 	if err != nil {
@@ -110,12 +108,15 @@ func LogicalDeleteFood(foodId string) error {
 // 	return rows, nil
 // }
 
-// 增加和修改验证Req
-func CheckFoodReqCreate(e echo.Context) (*models.Food, error) {
-	foodReq := models.Food{}
-	err := e.Bind(&foodReq)
-	if err != nil {
-		return nil, err
-	}
-	return &foodReq, nil
-}
+// 验证Req
+/*
+   echo上下文,中包含req的请求数据等等,所以不应该传到service层
+*/
+// func CheckFoodReqCreate(e echo.Context) (*models.Food, error) {
+// 	foodReq := models.Food{}
+// 	err := e.Bind(&foodReq)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return &foodReq, nil
+// }
